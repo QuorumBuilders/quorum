@@ -13,11 +13,11 @@ class  Resource(models.Model):
     """
     title = models.CharField(max_length=128,db_index=True)
     content_type = models.CharField(choices=ResourceType.choices)
-    # reverse relationship of links
+    # reverse relationship of links 
     # reverse relationship of courses
     # reverse relationship of category
-    url = models.URLField(unique=True)
-    file = models.FileField(upload_to="media/resources/")
+    url = models.URLField(unique=True,null=True,blank=True)
+    file = models.FileField(upload_to="media/resources/",blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -36,7 +36,10 @@ class ResourceCategory(models.Model):
 
 class Link(models.Model):
     url = models.URLField(unique=True)
-    book = models.ForeignKey(Resource,on_delete=models.CASCADE,related_name='links')
+    resource = models.ForeignKey(Resource,on_delete=models.CASCADE,related_name='links')
+
+    def __str__(self):
+        return self.resource.title[:10] + self.url[:10]
 
 class Course(models.Model):
     title = models.CharField(max_length=64)
@@ -44,4 +47,7 @@ class Course(models.Model):
     unit = models.CharField(max_length=2,null=True,blank=True)
     synopsis = models.TextField(null=True,blank=True)
     outline = models.TextField(null=True,blank=True)
-    books = models.ManyToManyField(Resource,related_name='courses',blank=True)
+    resource = models.ManyToManyField(Resource,related_name='courses',blank=True)
+
+    def __str__(self):
+        return self.code + self.title[:15]
