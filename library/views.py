@@ -24,7 +24,7 @@ class CourseViewset(ReadOnlyModelViewSet):
     """
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
-    permission_classes = [IsAuthenticated,]
+    #permission_classes = [IsAuthenticated,]
         
     @action(detail=False)
     def search(self,request):
@@ -54,7 +54,7 @@ class ResourceViewset(ModelViewSet):
     """
     queryset = Resource.objects.all()
     serializer_class = ResourceSerializer
-    permission_classes = [IsAuthenticated,]
+    #permission_classes = [IsAuthenticated,]
 
     @action(detail=False)
     def search(self,request):
