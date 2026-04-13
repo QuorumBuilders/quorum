@@ -11,7 +11,7 @@ class Content(models.Model):
     author = models.ForeignKey(User,on_delete=models.CASCADE)
     content = models.TextField()
     parent = models.ForeignKey("self",null=True,blank=True,on_delete=models.CASCADE,related_name="replies")
-    media = models.FileField(upload_to='media/posts/')
+    media = models.FileField(upload_to='posts/')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 

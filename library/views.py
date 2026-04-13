@@ -1,3 +1,65 @@
-from django.shortcuts import render
+from rest_framework.response import  Response
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import action
+from library.models import Resource, Course
+from library.serializers import  (CourseSerializer, ResourceSerializer)
 
-# Create your views here.
+class CourseViewset(ReadOnlyModelViewSet):
+    """
+    get:
+    Returns courses data.
+    filters => level, unit.
+
+    get(search):
+    search by course title or course code
+    filters => title, code
+
+    authenticattion:
+    - JWT required
+
+    reponses:
+    200: course data
+    401: unauthorized
+    """
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
+    permission_classes = [IsAuthenticated,]
+        
+    @action(detail=False)
+    def search(self,request):
+        title = request.query_params.get('title') or ''
+        code = request.query_params.get('code') or ''
+        queryset = Course.objects.filter(title__icontains=title,code__icontains=code)
+        serializer = CourseSerializer(queryset,many=True)
+        return Response(serializer.data)
+        
+
+class ResourceViewset(ModelViewSet):
+    """
+    get:
+    Returns resource data.
+    filters => level, unit.
+
+    get(search):
+    Returns data from a search query
+    filters => title, content_type
+
+    authenticattion:
+    - JWT required
+
+    reponses:
+    200: resource data
+    401: unauthorized
+    """
+    queryset = Resource.objects.all()
+    serializer_class = ResourceSerializer
+    permission_classes = [IsAuthenticated,]
+
+    @action(detail=False)
+    def search(self,request):
+        title = request.query_params.get('title') or ''
+        content_type = request.query_params.get('content_type') or ''
+        queryset = Resource.objects.filter(title__icontains=title,content_type__icontains=content_type)
+        serializer = ResourceSerializer(queryset,many=True)
+        return Response(serializer.data)

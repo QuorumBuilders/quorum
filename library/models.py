@@ -17,7 +17,7 @@ class  Resource(models.Model):
     # reverse relationship of courses
     # reverse relationship of category
     url = models.URLField(unique=True,null=True,blank=True)
-    file = models.FileField(upload_to="media/resources/",blank=True, null=True)
+    file = models.FileField(upload_to="resources/",blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -39,15 +39,16 @@ class Link(models.Model):
     resource = models.ForeignKey(Resource,on_delete=models.CASCADE,related_name='links')
 
     def __str__(self):
-        return self.resource.title[:10] + self.url[:10]
+        return f"{self.resource.title[:10]} --{self.url[:10]}"
 
 class Course(models.Model):
     title = models.CharField(max_length=64)
     code = models.CharField(max_length=8)
+    level =  models.CharField(max_length=3)
     unit = models.CharField(max_length=2,null=True,blank=True)
     synopsis = models.TextField(null=True,blank=True)
     outline = models.TextField(null=True,blank=True)
     resource = models.ManyToManyField(Resource,related_name='courses',blank=True)
 
     def __str__(self):
-        return self.code + self.title[:15]
+        return f"{self.code} --{self.title[:15]}"
