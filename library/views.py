@@ -1,3 +1,6 @@
+from django.http import StreamingHttpResponse
+from rest_framework.views import APIView
+from main.drive_api import download_file, DriveService
 from rest_framework.response import  Response
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.permissions import IsAuthenticated
@@ -63,3 +66,24 @@ class ResourceViewset(ModelViewSet):
         queryset = Resource.objects.filter(title__icontains=title,content_type__icontains=content_type)
         serializer = ResourceSerializer(queryset,many=True)
         return Response(serializer.data)
+    
+
+class StreamMaterialView(APIView):
+    def get(self, request, file_id):
+        # 1. Fetch metadata first (small request)
+        metadata = DriveService.files().get(fileId=file_id).execute()
+        filename = metadata.get('name', 'document.pdf')
+        filesize = int(metadata.get('size', 0))
+
+
+        # 3. Stream the response
+        response = StreamingHttpResponse(
+            download_file(file_id=file_id),
+            content_type=metadata.get('mimeType', 'application/octet-stream')
+        )
+        response['Content-Disposition'] = f'attachment; filename="{filename}"'
+        # Providing Content-Length helps the browser show a progress bar
+        if filesize:
+            response['Content-Length'] = filesize
+            
+        return response

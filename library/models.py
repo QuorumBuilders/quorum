@@ -48,6 +48,7 @@ class Course(models.Model):
     unit = models.CharField(max_length=2,null=True,blank=True)
     synopsis = models.TextField(null=True,blank=True)
     outline = models.TextField(null=True,blank=True)
+    drive_id = models.CharField(max_length=128,null=True, blank=True)
     resource = models.ManyToManyField(Resource,related_name='courses',blank=True)
 
     def __str__(self):
