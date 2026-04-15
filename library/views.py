@@ -43,7 +43,7 @@ class CourseViewset(ReadOnlyModelViewSet):
         return Response(serializer.data)
         
 
-class ResourceViewset(ModelViewSet):
+class ResourceViewset(ReadOnlyModelViewSet):
     """
     get:
     Returns resource data.
