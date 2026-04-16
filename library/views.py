@@ -24,21 +24,29 @@ class CourseViewset(ReadOnlyModelViewSet):
     200: course data
     401: unauthorized
     400: bad request (e.g empty search query)
-    """
+    """ 
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
     #permission_classes = [IsAuthenticated,]
         
-    @action(detail=False)
+    @action(detail=False,methods=['GET'])
     def search(self,request):
-        title = request.query_params.get('title') or ''
-        code = request.query_params.get('code') or ''
+        title = request.query_params.get('title')
+        code = request.query_params.get('code')
+        level = request.query_params.get('level')
+        query = {}
+        if title:
+            query['title__icontains'] = title
+        if code:
+            query['code__icontains'] = code
+        if level:
+            query['level__icontains'] = level
 
-        if title.strip() == '' and code.strip() == '':
+        if len(query) == 0:
             # returns 404 if query is empty
             return Response({'error':'Empty search query'},status=400)
 
-        queryset = Course.objects.filter(title__icontains=title,code__icontains=code)
+        queryset = Course.objects.filter(**query)
         serializer = CourseSerializer(queryset,many=True)
         return Response(serializer.data)
         
@@ -51,7 +59,7 @@ class ResourceViewset(ReadOnlyModelViewSet):
 
     get(search):
     Returns data from a search query
-    filters => title, content_type
+    filters => title, mime_type
 
     authenticattion:
     - JWT required
@@ -67,14 +75,20 @@ class ResourceViewset(ReadOnlyModelViewSet):
 
     @action(detail=False)
     def search(self,request):
-        title = request.query_params.get('title') or '' 
-        content_type = request.query_params.get('content_type') or ''
+        name = request.query_params.get('name')
+        mime_type = request.query_params.get('mime_type')
 
-        if title.strip() == '' and content_type.strip() == '':
+        query = {}
+        if name:
+            query['name__icontains'] = name
+        if mime_type:
+            query['mime_type__icontains'] = mime_type
+
+        if len(query) == 0:
             # returns 404 if query is empty
             return Response({'error':'Empty search query'},status=400)
 
-        queryset = Resource.objects.filter(title__icontains=title,content_type__icontains=content_type)
+        queryset = Resource.objects.filter(**query)
         serializer = ResourceSerializer(queryset,many=True)
         return Response(serializer.data)
     
