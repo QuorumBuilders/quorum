@@ -5,5 +5,6 @@ app_name = 'main'
 
  
 urlpatterns = [
-    path('',view=views.Index.as_view())
+    path('',view=views.Index.as_view()),
+    path('sync/',view=views.Sync.as_view()),
 ]

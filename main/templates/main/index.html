@@ -39,6 +39,9 @@
     <section id="features" class="features">
         <div class="container">
             <h2>TEST GROUND</h2>
+            {% if user.is_authenticated %}
+            <button id="data-sync-btn" type="button">SYNC DATA</button>
+            {% endif %}
             <div id="search-cont">
                 <input type="text" id="search-box" placeholder=" search for a course material">
                 <button type="button" id="search-btn">search</button>

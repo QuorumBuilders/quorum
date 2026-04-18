@@ -162,6 +162,10 @@ ul {
     margin: auto;
     border-radius: 10px;
 }
+#search-box::placeholder{
+    font-size: 14px;
+    font-weight: 400;
+}
 #search-btn{
     display: block;
     width: 40%;
@@ -175,6 +179,9 @@ ul {
     font-size: 16px;
     border-style: none ;
 }
+#search-btn:hover{
+    background-color: rgb(0, 213, 255);
+}
 #search-result-item{
     color: #444;
 }
@@ -184,7 +191,28 @@ ul {
 #download-link{
     color: coral;
 }
-
+/*==== Data Sync ====*/
+#data-sync-btn{
+    width: 40%;
+    padding: 10px;
+    background-color: rgb(0, 102, 255);
+    color: #fff;
+    border-radius: 15px;
+    font-size: 16px;
+    font-weight: 500;
+    display: block;
+    margin: auto;
+    margin-top: 15px;
+    margin-bottom: 20px;
+    border-style: none;
+}
+#data-sync-btn:hover{
+    background-color: rgb(255, 98, 0);
+}
+#data-sync-btn:disabled{
+    background-color: grey;
+    color: #444;
+}
  
 /* ===== Footer ===== */
 .footer {
@@ -255,6 +283,9 @@ ul {
 
     .hero p {
         font-size: 1rem;
+    }
+    #search-cont{
+        width: 80%;
     }
 
     .footer .container {

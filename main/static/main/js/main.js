@@ -47,7 +47,7 @@ searchBtn.addEventListener('click',
             resBox = document.querySelector('#search-result')
             buffer = '<ul>'
             for (item of data){
-                buffer += `<li class='search-result-item'>${item.name}<br><a class='preview-link' href='${item.preview_url}'>preview</a> <a #download-link href='${item.download_url}'>download</a></li><br>`
+                buffer += `<li class='search-result-item'>${item.name}<br><a class='preview-link' href='${item.preview_url}'>preview</a> | <a #download-link href='${item.download_url}'>download</a></li><br>`
             }
             if(data.length == 0){
                 buffer += '<p>query returned no result</p>';
@@ -58,3 +58,12 @@ searchBtn.addEventListener('click',
         })
     }
     ,false)
+
+    // Data sync logic
+    document.querySelector('#data-sync-btn').addEventListener('click',
+        (event)=>{
+            event.target.setAttribute('disabled','true')
+            fetch('/sync/')
+            .then((res)=> event.target.removeAttribute('disabled'))
+        }
+        ,false)
